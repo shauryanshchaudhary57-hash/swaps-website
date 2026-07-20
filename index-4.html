@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swaps — One base. Interchangeable straps.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17181a;
+    --ink-2:#1f2123;
+    --bone:#f1ede4;
+    --bone-dim:#b9b6ac;
+    --signal:#ff4e1f;
+    --steel:#5f7a94;
+    --warn:#f2c94c;
+    --line:#3a3c3e;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .display{font-family:'Archivo Black',sans-serif; text-transform:uppercase; letter-spacing:-0.01em;}
+
+  a{color:inherit;}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 6vw;
+    background:rgba(23,24,26,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Archivo Black',sans-serif;
+    font-size:20px;
+    letter-spacing:0.02em;
+  }
+  .logo .glyph{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:30px; height:30px;
+    border:1.5px solid var(--bone);
+    border-radius:50%;
+    font-size:15px;
+    color:var(--signal);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .navlinks{display:flex; gap:32px; font-size:14px; font-weight:500;}
+  .navlinks a{text-decoration:none; color:var(--bone-dim); transition:color .2s;}
+  .navlinks a:hover{color:var(--bone);}
+  .nav-cta{
+    font-size:13px; font-weight:600; padding:10px 18px;
+    border:1px solid var(--bone); border-radius:var(--radius);
+    text-decoration:none;
+    transition: background .2s, color .2s;
+  }
+  .nav-cta:hover{background:var(--bone); color:var(--ink);}
+  @media (max-width:720px){ .navlinks{display:none;} }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:8vw 6vw 6vw;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:48px;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+  }
+  @media (max-width:900px){ .hero{grid-template-columns:1fr; padding-top:14vw;} }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px; letter-spacing:0.08em;
+    color:var(--warn);
+    border:1px solid var(--line);
+    padding:6px 10px;
+    border-radius:var(--radius);
+    margin-bottom:24px;
+  }
+  .eyebrow::before{content:"●"; color:var(--signal); font-size:8px;}
+
+  h1.display{
+    font-size:clamp(34px, 5vw, 64px);
+    line-height:1.02;
+    margin:0 0 22px;
+  }
+  h1.display span{color:var(--signal);}
+
+  .hero p.sub{
+    font-size:17px; line-height:1.6; color:var(--bone-dim);
+    max-width:46ch; margin:0 0 32px;
+  }
+
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--signal); color:var(--ink);
+    font-weight:700; font-size:15px;
+    padding:14px 26px; border:none; border-radius:var(--radius);
+    text-decoration:none; display:inline-block; cursor:pointer;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary:hover{background:#ff6a3d; transform:translateY(-1px);}
+  .btn-ghost{
+    color:var(--bone); font-weight:600; font-size:15px;
+    padding:14px 22px; border:1px solid var(--line); border-radius:var(--radius);
+    text-decoration:none; display:inline-block;
+    transition:border-color .15s ease;
+  }
+  .btn-ghost:hover{border-color:var(--bone);}
+
+  /* ---------- Schematic diagram (signature element) ---------- */
+  .schematic{
+    position:relative;
+    background:
+      linear-gradient(var(--ink-2) 1px, transparent 1px) 0 0/100% 24px,
+      linear-gradient(90deg, var(--ink-2) 1px, transparent 1px) 0 0/24px 100%,
+      var(--ink);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:28px;
+    min-height:380px;
+  }
+  .schematic-tag{
+    position:absolute; top:14px; right:16px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--bone-dim);
+  }
+  .schematic svg{width:100%; height:auto; display:block;}
+  .callout{font-family:'IBM Plex Mono',monospace; font-size:10.5px; fill:var(--bone-dim);}
+  .callout-code{fill:var(--warn);}
+  .leader{stroke:var(--bone-dim); stroke-width:1; stroke-dasharray:3 3;}
+  .shoe-fill{fill:#26282b; stroke:var(--bone-dim); stroke-width:1.4;}
+  .part-highlight{fill:none; stroke:var(--signal); stroke-width:1.6; stroke-dasharray:5 3;}
+
+  /* ---------- How it works ---------- */
+  .section{padding:7vw 6vw; border-bottom:1px solid var(--line);}
+  .section-head{max-width:640px; margin-bottom:48px;}
+  .section-head .kicker{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.1em;
+    color:var(--steel); text-transform:uppercase; display:block; margin-bottom:12px;
+  }
+  .section-head h2.display{font-size:clamp(26px,3.4vw,40px); margin:0 0 14px;}
+  .section-head p{color:var(--bone-dim); font-size:16px; line-height:1.6; margin:0;}
+
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .step{background:var(--ink); padding:32px 28px;}
+  .step .num{font-family:'IBM Plex Mono',monospace; color:var(--signal); font-size:14px; margin-bottom:18px; display:block;}
+  .step h3{font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:17px; margin:0 0 10px; letter-spacing:0.01em;}
+  .step p{color:var(--bone-dim); font-size:14.5px; line-height:1.6; margin:0;}
+  @media (max-width:800px){ .steps{grid-template-columns:1fr;} }
+
+  .mech-panels{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:760px){ .mech-panels{grid-template-columns:1fr;} }
+  .mech-panel{background:var(--ink-2); border:1px solid var(--line); border-radius:8px; padding:22px; text-align:center;}
+  .mech-eyebrow{font-size:11px; color:var(--warn); letter-spacing:0.08em; margin-bottom:6px;}
+  .mech-panel h3{font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:15px; margin:0 0 16px;}
+  .mech-stage{background:var(--ink); border:1px solid var(--line); border-radius:6px; padding:14px;}
+  .mech-stage svg{width:100%; max-width:200px; height:auto; display:block; margin:0 auto;}
+  .mech-btn{
+    margin-top:16px; font-weight:700; font-size:13px; padding:11px 20px; border-radius:3px; cursor:pointer;
+    border:1px solid var(--signal); background:var(--signal); color:var(--ink); transition:.15s;
+  }
+  .mech-caption{margin-top:14px; color:var(--bone-dim); font-size:13px; line-height:1.55; text-align:left;}
+
+  /* ---------- Waitlist ---------- */
+  .waitlist{
+    padding:7vw 6vw 8vw;
+    display:grid; grid-template-columns:0.8fr 1.2fr; gap:56px;
+  }
+  @media (max-width:900px){ .waitlist{grid-template-columns:1fr;} }
+
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:520px){ .field-row{grid-template-columns:1fr;} }
+  .field{margin-bottom:18px;}
+  select{
+    width:100%; background:var(--ink); border:1px solid var(--line); color:var(--bone);
+    padding:14px 16px; border-radius:var(--radius); font-size:15px; font-family:'Inter',sans-serif;
+    outline:none; transition:border-color .15s; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b9b6ac' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 16px center;
+  }
+  select:focus{border-color:var(--signal);}
+
+  .waitlist .kicker{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.1em;
+    color:var(--steel); text-transform:uppercase; display:block; margin-bottom:12px;
+  }
+  .waitlist h2.display{font-size:clamp(28px,3.6vw,44px); margin:0 0 16px;}
+  .waitlist p.sub{color:var(--bone-dim); font-size:16px; line-height:1.6; max-width:42ch;}
+  .count-chip{
+    margin-top:28px; display:inline-flex; align-items:baseline; gap:8px;
+    font-family:'IBM Plex Mono',monospace; border:1px solid var(--line); padding:12px 16px; border-radius:var(--radius);
+  }
+  .count-chip .n{font-size:22px; color:var(--warn); font-weight:600;}
+  .count-chip .l{font-size:12px; color:var(--bone-dim);}
+
+  .card{
+    background:var(--ink-2); border:1px solid var(--line); border-radius:6px;
+    padding:36px; position:relative; overflow:hidden;
+  }
+  .card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--signal), var(--warn));
+  }
+  .field-label{
+    display:block; font-size:12px; font-family:'IBM Plex Mono',monospace;
+    color:var(--bone-dim); letter-spacing:0.06em; margin-bottom:8px; text-transform:uppercase;
+  }
+  input[type=text], input[type=email]{
+    width:100%; background:var(--ink); border:1px solid var(--line); color:var(--bone);
+    padding:14px 16px; border-radius:var(--radius); font-size:15px; font-family:'Inter',sans-serif;
+    outline:none; transition:border-color .15s;
+  }
+  input[type=text]:focus, input[type=email]:focus{border-color:var(--signal);}
+  .step-form{display:none;}
+  .step-form.active{display:block;}
+
+  .otp-row{display:flex; gap:10px; margin:6px 0 4px;}
+  .otp-box{
+    width:46px; height:54px; text-align:center; font-size:20px;
+    font-family:'IBM Plex Mono',monospace; background:var(--ink); border:1px solid var(--line);
+    color:var(--bone); border-radius:var(--radius); outline:none;
+  }
+  .otp-box:focus{border-color:var(--signal);}
+
+  .demo-note{
+    margin-top:16px; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    color:var(--warn); background:rgba(242,201,76,0.08); border:1px dashed var(--warn);
+    padding:10px 12px; border-radius:var(--radius); display:none;
+  }
+  .demo-note.show{display:block;}
+
+  .resend{font-size:13px; color:var(--bone-dim); margin-top:14px;}
+  .resend button{background:none; border:none; color:var(--steel); font-weight:600; cursor:pointer; padding:0; font-size:13px; text-decoration:underline;}
+
+  .form-error{color:var(--signal); font-size:13px; margin-top:10px; display:none;}
+  .form-error.show{display:block;}
+
+  .success-state{display:none; text-align:center; padding:20px 0;}
+  .success-state.show{display:block;}
+  .success-state .glyph{
+    width:56px; height:56px; border-radius:50%; border:1.5px solid var(--warn); color:var(--warn);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .success-state h3{font-family:'Archivo Black',sans-serif; text-transform:uppercase; margin:0 0 10px; font-size:19px;}
+  .success-state p{color:var(--bone-dim); font-size:14.5px; line-height:1.6; margin:0;}
+  .success-state .position{color:var(--warn); font-family:'IBM Plex Mono',monospace;}
+
+  footer{
+    padding:32px 6vw; display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+    font-size:13px; color:var(--bone-dim);
+  }
+  footer .logo{font-size:15px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span class="glyph">⇄</span>SWAPS</div>
+  <div class="navlinks">
+    <a href="#how">How it works</a>
+    <a href="#waitlist">Waitlist</a>
+  </div>
+  <a href="#waitlist" class="nav-cta">Join waitlist</a>
+</nav>
+
+<section class="hero">
+  <div>
+    <span class="eyebrow mono">SWP-001 / UNRELEASED</span>
+    <h1 class="display">One base.<br><span>Endless straps.</span></h1>
+    <p class="sub">A slide built around one fixed sole and a strap that swaps in seconds. Same comfort, same base, a different look whenever you want one — no new pair required.</p>
+    <div class="hero-ctas">
+      <a href="#waitlist" class="btn-primary">Get early access</a>
+      <a href="#how" class="btn-ghost">How it works</a>
+    </div>
+  </div>
+
+  <div class="schematic">
+    <span class="schematic-tag mono">FIG. 01 — TOP VIEW</span>
+    <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- sole (top-down) -->
+      <path class="shoe-fill" d="M150 40 C110 40 95 75 95 120 L95 220 C95 270 120 300 160 310 C185 316 210 316 235 310 C270 300 290 270 290 220 L290 120 C290 70 270 40 225 40 Z"/>
+      <!-- strap band -->
+      <rect x="80" y="95" width="225" height="46" rx="23" class="part-highlight" fill="none"/>
+      <rect x="88" y="102" width="209" height="32" rx="16" fill="#3a3d41" stroke="#5c5f63" stroke-width="1"/>
+      <text x="192" y="123" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="11" fill="#b9b6ac">SWAPS</text>
+
+      <!-- magnet points -->
+      <circle cx="95" cy="118" r="7" fill="none" stroke="#f2c94c" stroke-width="1.4" stroke-dasharray="2 2"/>
+      <circle cx="290" cy="118" r="7" fill="none" stroke="#f2c94c" stroke-width="1.4" stroke-dasharray="2 2"/>
+
+      <!-- leader lines + labels -->
+      <line class="leader" x1="290" y1="118" x2="360" y2="80"/>
+      <text x="330" y="70" class="callout"><tspan class="callout-code">PT-01</tspan></text>
+      <text x="308" y="84" class="callout">STRAP (SWAPPABLE)</text>
+
+      <line class="leader" x1="150" y1="250" x2="70" y2="270"/>
+      <text x="10" y="285" class="callout"><tspan class="callout-code">PT-00</tspan></text>
+      <text x="22" y="270" class="callout">SOLE (FIXED)</text>
+
+      <text x="200" y="220" class="callout" text-anchor="middle" fill="#5f7a94">TWO ATTACHMENT MECHANISMS IN TESTING —</text>
+      <text x="200" y="234" class="callout" text-anchor="middle" fill="#5f7a94">SEE BELOW</text>
+    </svg>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="section-head">
+    <span class="kicker">One base, many looks</span>
+    <h2 class="display">How it works</h2>
+    <p>The sole never changes — only the strap does. We're testing two ways to make that swap happen; your feedback below helps pick the one we build.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <span class="num mono">01</span>
+      <h3>Pick your base</h3>
+      <p>One sole, built to last through every strap you'll ever put on it.</p>
+    </div>
+    <div class="step">
+      <span class="num mono">02</span>
+      <h3>Choose your strap</h3>
+      <p>Swap prints, colors and textures on the same base — no new pair required.</p>
+    </div>
+    <div class="step">
+      <span class="num mono">03</span>
+      <h3>Tell us how it should attach</h3>
+      <p>We're deciding between two mechanisms right now — vote when you join the waitlist.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="mechanisms">
+  <div class="section-head">
+    <span class="kicker">Help us decide</span>
+    <h2 class="display">Two ways to swap it</h2>
+    <p>Same black sole in both. Tap each to see it detach, then tell us which you'd rather have when you join the waitlist.</p>
+  </div>
+
+  <div class="mech-panels">
+    <div class="mech-panel">
+      <div class="mech-eyebrow mono">MECH-01</div>
+      <h3>Whole strap detaches</h3>
+      <div class="mech-stage">
+        <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+          <defs><radialGradient id="mg1" r="1"><stop offset="0%" stop-color="#f2c94c" stop-opacity="0.9"/><stop offset="100%" stop-color="#f2c94c" stop-opacity="0"/></radialGradient></defs>
+          <path d="M70 30 C40 30 30 60 30 100 L30 210 C30 255 50 282 80 292 C110 300 150 300 180 292 C200 282 210 255 210 210 L210 100 C210 50 190 30 150 30 Z" fill="#26282b" stroke="#4a4c4f" stroke-width="2"/>
+          <g id="mechStrap1" style="transition:transform 0.7s cubic-bezier(.4,0,.2,1), opacity 0.7s;">
+            <rect x="18" y="86" width="204" height="48" rx="24" fill="#c73d13" stroke="#8a2c0c" stroke-width="1.5"/>
+            <text x="120" y="115" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="12" fill="#f1ede4">SWAPS</text>
+          </g>
+          <circle id="mm1a" cx="34" cy="110" r="15" fill="url(#mg1)"/><circle cx="34" cy="110" r="4" fill="#f2c94c"/>
+          <circle id="mm1b" cx="206" cy="110" r="15" fill="url(#mg1)"/><circle cx="206" cy="110" r="4" fill="#f2c94c"/>
+        </svg>
+      </div>
+      <button class="mech-btn" onclick="toggleMech1()" id="mechBtn1">Detach strap</button>
+      <p class="mech-caption">Simple, one piece — but the whole strap (shape included) is what you're replacing.</p>
+    </div>
+
+    <div class="mech-panel">
+      <div class="mech-eyebrow mono">MECH-02</div>
+      <h3>Overlay swaps, base stays</h3>
+      <div class="mech-stage">
+        <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+          <defs><radialGradient id="mg2" r="1"><stop offset="0%" stop-color="#f2c94c" stop-opacity="0.9"/><stop offset="100%" stop-color="#f2c94c" stop-opacity="0"/></radialGradient></defs>
+          <path d="M70 30 C40 30 30 60 30 100 L30 210 C30 255 50 282 80 292 C110 300 150 300 180 292 C200 282 210 255 210 210 L210 100 C210 50 190 30 150 30 Z" fill="#26282b" stroke="#4a4c4f" stroke-width="2"/>
+          <rect x="18" y="86" width="204" height="48" rx="24" fill="#7a2812" stroke="#5c1c0c" stroke-width="1.5"/>
+          <g id="mechStrap2" style="transition:transform 0.7s cubic-bezier(.4,0,.2,1), opacity 0.7s;">
+            <rect x="26" y="94" width="188" height="26" rx="13" fill="#ff4e1f" stroke="#c73d13" stroke-width="1.2"/>
+            <text x="120" y="112" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="10" fill="#1a1a1a">SWAPS</text>
+          </g>
+          <circle id="mm2a" cx="40" cy="107" r="10" fill="url(#mg2)"/><circle cx="40" cy="107" r="3" fill="#f2c94c"/>
+          <circle id="mm2b" cx="200" cy="107" r="10" fill="url(#mg2)"/><circle cx="200" cy="107" r="3" fill="#f2c94c"/>
+        </svg>
+      </div>
+      <button class="mech-btn" onclick="toggleMech2()" id="mechBtn2">Detach overlay</button>
+      <p class="mech-caption">The base is fused to the sole permanently. Only the thin overlay on top ever comes off.</p>
+    </div>
+  </div>
+</section>
+
+<section class="waitlist" id="waitlist">
+  <div>
+    <span class="kicker">Early access</span>
+    <h2 class="display">Get on the list</h2>
+    <p class="sub">We'll send a code the moment SWP-001 opens for pre-order. One message, no spam.</p>
+    <div class="count-chip">
+      <span class="n mono" id="waitlistCount">0</span>
+      <span class="l">already on the list</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <!-- Step 1: details -->
+    <div class="step-form active" id="stepContact">
+      <div class="field">
+        <label class="field-label" for="nameInput">Full name</label>
+        <input type="text" id="nameInput" placeholder="Your name" autocomplete="off">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="emailInput">Email (for your verification code)</label>
+          <input type="text" id="emailInput" placeholder="you@example.com" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="phoneInput">Phone number</label>
+          <input type="text" id="phoneInput" placeholder="+91 98765 43210" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="cityInput">City</label>
+          <input type="text" id="cityInput" placeholder="Your city" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="shoeSizeInput">Shoe size (UK)</label>
+          <input type="text" id="shoeSizeInput" placeholder="e.g. 8" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="mechPrefInput">Which attachment do you prefer?</label>
+          <select id="mechPrefInput">
+            <option value="">Select</option>
+            <option>MECH-01 — whole strap detaches</option>
+            <option>MECH-02 — overlay only, base fixed</option>
+            <option>No preference</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="referralInput">How did you hear about us?</label>
+          <select id="referralInput">
+            <option value="">Select</option>
+            <option>Instagram</option>
+            <option>Friend or family</option>
+            <option>Google search</option>
+            <option>Sneaker community / forum</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-error" id="contactError">Fill in your name, a valid email, and a valid phone number to continue.</div>
+      <button class="btn-primary" style="margin-top:6px; width:100%;" onclick="sendCode()">Send verification code</button>
+    </div>
+
+    <!-- Step 2: OTP -->
+    <div class="step-form" id="stepOtp">
+      <label class="field-label">Enter the 6-digit code sent to <span id="contactDisplay" class="mono" style="color:var(--bone);"></span></label>
+      <div class="otp-row" id="otpRow">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+        <input class="otp-box" maxlength="1" inputmode="numeric">
+      </div>
+      <div class="form-error" id="otpError">That code doesn't match. Try again.</div>
+      <div class="demo-note" id="demoNote"></div>
+      <button class="btn-primary" style="margin-top:18px; width:100%;" onclick="verifyCode()">Verify &amp; join waitlist</button>
+      <div class="resend">Wrong email? <button onclick="backToContact()">Edit details</button> &nbsp;·&nbsp; <button onclick="sendCode(true)">Resend code</button></div>
+    </div>
+
+    <!-- Step 3: success -->
+    <div class="success-state" id="stepSuccess">
+      <div class="glyph">⇄</div>
+      <h3>You're on the list</h3>
+      <p>Position <span class="position" id="positionNum">#0</span> — we'll reach out the moment PT-00 through PT-03 are ready to ship.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo"><span class="glyph" style="width:22px;height:22px;font-size:12px;">⇄</span>SWAPS</div>
+  <div>© 2026 Swaps. SWP-001 has not shipped yet.</div>
+</footer>
+
+<script>
+  // ---- Paste your Google Apps Script Web App URL here (see setup notes) ----
+  const SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzqgyoLhIxhhRnugi0CEHr-JdCXZHwczg0h-88LUt4dFp0Va4bOzSjs9m4PjD9Tr68Aiw/exec";
+
+  // OTP is sent via SMS through a Netlify Function (netlify/functions/otp.js)
+  // which talks to Message Central securely. No keys needed here — they live
+  // in Netlify's Environment Variables instead.
+  const OTP_ENDPOINT = "/.netlify/functions/otp";
+
+  // ---- Mechanism preference toggles (MECH-01 / MECH-02 demo panels) ----
+  let mech1On = true, mech2On = true;
+  function toggleMech1(){
+    const strap = document.getElementById('mechStrap1');
+    const a = document.getElementById('mm1a'), b = document.getElementById('mm1b');
+    mech1On = !mech1On;
+    if(mech1On){
+      strap.style.transform = 'translateY(0px)'; strap.style.opacity = 1;
+      a.style.opacity = 1; b.style.opacity = 1;
+      document.getElementById('mechBtn1').textContent = 'Detach strap';
+    } else {
+      strap.style.transform = 'translateY(-60px)'; strap.style.opacity = 0.15;
+      a.style.opacity = 0; b.style.opacity = 0;
+      document.getElementById('mechBtn1').textContent = 'Reattach strap';
+    }
+  }
+  function toggleMech2(){
+    const overlay = document.getElementById('mechStrap2');
+    const a = document.getElementById('mm2a'), b = document.getElementById('mm2b');
+    mech2On = !mech2On;
+    if(mech2On){
+      overlay.style.transform = 'translateY(0px)'; overlay.style.opacity = 1;
+      a.style.opacity = 1; b.style.opacity = 1;
+      document.getElementById('mechBtn2').textContent = 'Detach overlay';
+    } else {
+      overlay.style.transform = 'translateY(-45px)'; overlay.style.opacity = 0.15;
+      a.style.opacity = 0; b.style.opacity = 0;
+      document.getElementById('mechBtn2').textContent = 'Reattach overlay';
+    }
+  }
+
+  let currentVerificationId = null;
+  let currentContact = null;
+  let formData = null;
+  let sendInFlight = false;
+
+  function isValidPhone(v){
+    return /^[+0-9\s-]{7,15}$/.test(v.trim());
+  }
+  function isValidEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+  }
+
+  async function getCount(){
+    try{
+      const res = await window.storage.get('waitlist-count', true);
+      return res && res.value ? parseInt(res.value, 10) : 0;
+    }catch(e){ return 0; }
+  }
+
+  async function setCount(n){
+    try{ await window.storage.set('waitlist-count', String(n), true); }catch(e){}
+  }
+
+  async function refreshCountDisplay(){
+    const n = await getCount();
+    document.getElementById('waitlistCount').textContent = n;
+  }
+  refreshCountDisplay();
+
+  function collectFormData(){
+    return {
+      name: document.getElementById('nameInput').value.trim(),
+      phone: document.getElementById('phoneInput').value.trim(),
+      email: document.getElementById('emailInput').value.trim(),
+      city: document.getElementById('cityInput').value.trim(),
+      shoeSize: document.getElementById('shoeSizeInput').value.trim(),
+      referral: document.getElementById('referralInput').value,
+      mechanismPref: document.getElementById('mechPrefInput').value,
+      submittedAt: new Date().toISOString()
+    };
+  }
+
+  async function sendCode(isResend){
+    const err = document.getElementById('contactError');
+    const note = document.getElementById('demoNote');
+    if(sendInFlight) return;
+
+    let data;
+    if(isResend){
+      data = formData;
+    } else {
+      data = collectFormData();
+      if(!data.name || !isValidEmail(data.email) || !isValidPhone(data.phone)){
+        err.classList.add('show');
+        return;
+      }
+      err.classList.remove('show');
+      formData = data;
+      currentContact = data.phone;
+    }
+
+    sendInFlight = true;
+    note.className = 'demo-note show';
+    note.textContent = 'Sending code to ' + currentContact + ' …';
+
+    try{
+      const res = await fetch(OTP_ENDPOINT, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ action: 'send', mobileNumber: data.phone })
+      });
+      const result = await res.json();
+
+      if(!res.ok || !result.verificationId){
+        note.textContent = 'Could not send SMS: ' + (result.error || 'unknown error') + '. Check your Netlify Function is deployed and env vars are set.';
+        sendInFlight = false;
+        return;
+      }
+
+      currentVerificationId = result.verificationId;
+      note.textContent = 'Code sent by SMS to ' + currentContact + '.';
+
+      if(!isResend){
+        document.getElementById('contactDisplay').textContent = currentContact;
+        document.getElementById('stepContact').classList.remove('active');
+        document.getElementById('stepOtp').classList.add('active');
+        document.getElementById('otpError').classList.remove('show');
+        const boxes = document.querySelectorAll('.otp-box');
+        boxes.forEach(b => b.value = '');
+        boxes[0].focus();
+      }
+    }catch(e){
+      note.textContent = 'Could not reach the OTP service. Is the site deployed via Netlify (not just Drop)?';
+      console.error(e);
+    }
+    sendInFlight = false;
+  }
+
+  function backToContact(){
+    document.getElementById('stepOtp').classList.remove('active');
+    document.getElementById('stepContact').classList.add('active');
+  }
+
+  async function saveToSheet(data){
+    if(!SHEET_WEBHOOK_URL || SHEET_WEBHOOK_URL.indexOf('PASTE_YOUR') === 0){
+      console.warn('Sheet webhook not configured — skipping save.');
+      return;
+    }
+    try{
+      await fetch(SHEET_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'text/plain'},
+        body: JSON.stringify(data)
+      });
+    }catch(e){
+      console.error('Could not save to sheet', e);
+    }
+  }
+
+  document.getElementById('otpRow').addEventListener('input', (e) => {
+    if(e.target.classList.contains('otp-box')){
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      if(e.target.value && e.target.nextElementSibling){
+        e.target.nextElementSibling.focus();
+      }
+    }
+  });
+  document.getElementById('otpRow').addEventListener('keydown', (e) => {
+    if(e.key === 'Backspace' && !e.target.value && e.target.previousElementSibling){
+      e.target.previousElementSibling.focus();
+    }
+  });
+
+  async function verifyCode(){
+    const boxes = document.querySelectorAll('.otp-box');
+    const entered = Array.from(boxes).map(b => b.value).join('');
+    const err = document.getElementById('otpError');
+
+    if(entered.length < 6){
+      err.textContent = 'Enter all 6 digits.';
+      err.classList.add('show');
+      return;
+    }
+
+    let result;
+    try{
+      const res = await fetch(OTP_ENDPOINT, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ action: 'verify', verificationId: currentVerificationId, code: entered })
+      });
+      result = await res.json();
+    }catch(e){
+      err.textContent = 'Could not reach the OTP service to verify.';
+      err.classList.add('show');
+      return;
+    }
+
+    if(!result.verified){
+      err.textContent = "That code doesn't match. Try again.";
+      err.classList.add('show');
+      return;
+    }
+    err.classList.remove('show');
+
+    const newCount = (await getCount()) + 1;
+    await setCount(newCount);
+    await saveToSheet(formData);
+
+    document.getElementById('stepOtp').classList.remove('active');
+    document.getElementById('stepSuccess').classList.add('show');
+    document.getElementById('positionNum').textContent = '#' + newCount;
+    document.getElementById('waitlistCount').textContent = newCount;
+  }
+</script>
+
+</body>
+</html>
